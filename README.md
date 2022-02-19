@@ -16,6 +16,7 @@ cd dextools-trending-sniper-bot
 npm install
 ```
 Then edit .env file with your bsc wallet address, mnemonic, apiId and apiHash in your code editor and save file.
+Then put in the tokens that you do not want to buy in dextoolsBot.js
 
 To start bot run this command
 ```
