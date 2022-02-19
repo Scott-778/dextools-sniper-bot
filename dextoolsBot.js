@@ -3,10 +3,14 @@ Dextools Trending bot
 
 join this channel https://t.me/dextoolstrendingalerts
 
-This bot buys the number 1 trending BSC token on dextools automatically and will sell automatically when profit target reached or stop loss reached. 
+This bot buys the number 1 trending BSC token on dextools automatically 
+and will sell automatically when profit target reached or stop loss reached. 
 
-first time around it will buy the number 1 trending token on dextools, if the number 1 trending token changes it will automatically buy the new number 1 token. 
+first time around it will buy the number 1 trending token on dextools, 
+if the number 1 trending token changes it will automatically buy the new number 1 token. 
 it wont buy the same token twice while it is running.   
+
+
 
 
 Go to my.telegram.org and create App to get api_id and api_hash.
@@ -52,7 +56,8 @@ const buyAllTokensStrategy = {
     trailingStopLossPercent: 15 // 15% trailing stoploss
 }
 
-//put token addresses that you dont want to buy here
+//put token addresses that you dont want to buy here. 
+//if you dont want to buy the number 1 trending token when you first start up the bot put that token address here
 const dontBuyTheseTokens = [
 '0xe9e7cea3dedca5984780bafc599bd69add087d56',
 '',
