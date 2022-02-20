@@ -38,9 +38,10 @@ const stringSession = new StringSession(process.env.stringSession);
 var numberOfTokensToBuy = 10; // number of tokens you want to buy
 
 const autoSell = true;  // If you want to auto sell or not 
-const myGasPriceForApproval = ethers.utils.parseUnits('6', 'gwei');
-const myGasLimit = 1500000;
 
+const myGasPriceForApproval = ethers.utils.parseUnits('6', 'gwei');
+
+const myGasLimit = 1500000;
 
 /* buy Settings */
 const buyAllTokensStrategy = {
@@ -61,11 +62,9 @@ const dontBuyTheseTokens = [
     '0xe9e7cea3dedca5984780bafc599bd69add087d56',
     '',
     ''
-
 ];
 
 /*-----------End Settings-----------*/
-
 const node = 'https://bsc-dataseed.binance.org/';
 const wallet = new ethers.Wallet.fromMnemonic(mnemonic);
 const provider = new ethers.providers.JsonRpcProvider(node);
@@ -222,7 +221,6 @@ async function sell(tokenObj, isProfit) {
         const balanceToSell = ethers.utils.parseUnits(balanceString, decimals);
         const sellAmount = await pancakeRouter.getAmountsOut(balanceToSell, tokenObj.sellPath);
         const sellAmountsOutMin = sellAmount[1].sub(sellAmount[1].div(2));
-
         const tx = await pancakeRouter.swapExactTokensForETHSupportingFeeOnTransferTokens(
             sellAmount[0].toString(),
             0,
@@ -231,19 +229,16 @@ async function sell(tokenObj, isProfit) {
             Math.floor(Date.now() / 1000) + 60 * 3, {
             gasPrice: myGasPriceForApproval,
             gasLimit: myGasLimit,
-
         }
         );
         const receipt = await tx.wait();
         console.log("Sell transaction hash: ", receipt.transactionHash);
         sellCount++;
         token[tokenObj.index].didSell = true;
-
         if (sellCount == numberOfTokensToBuy) {
             console.log("All tokens sold");
             process.exit();
         }
-
     } catch (e) {
     }
 }
@@ -265,9 +260,7 @@ async function sell(tokenObj, isProfit) {
     });
     console.log("You should now be connected to Telegram");
     console.log("String session:", client.session.save(), '\n');
-
     const choices = ['Default', 'Enter Settings']
-
     await input.select('Welcome, please choose a buying strategy', choices).then(async function (answers) {
         if (answers == 'Enter Settings') {
             numberOfTokensToBuy = parseInt(await input.text("Enter how many different tokens you want to buy"));
@@ -280,16 +273,10 @@ async function sell(tokenObj, isProfit) {
             buyAllTokensStrategy.trailingStopLossPercent = parseFloat(await input.text("Enter trailing stop loss percent"));
             buyAllTokensStrategy.percentOfTokensToSellProfit = parseFloat(await input.text("Enter percent of tokens to sell when profit reached"));
             buyAllTokensStrategy.percentOfTokensToSellLoss = parseFloat(await input.text("Enter percent of tokens to sell when stop loss reached"));
-
         }
-
-
     });
-
     client.addEventHandler(onNewMessage, new NewMessage({}));
     console.log('\n', `Waiting to buy new dextools number 1 trending token with liquidity between ${buyAllTokensStrategy.minLiquidity} and ${buyAllTokensStrategy.maxLiquidity} BNB...`);
-
-
 })();
 
 /**
@@ -324,7 +311,6 @@ function didNotBuy(address) {
 async function onNewMessage(event) {
     const message = event.message;
     if (message.peerId.channelId == dextoolsChannel) {
-
         const msg = message.message.replace(/\n/g, " ").split(" ");
         var address = '';
         var pair = '';
@@ -341,7 +327,6 @@ async function onNewMessage(event) {
                 var liquidityBNB;
                 if (token0 == addresses.WBNB) {
                     liquidityBNB = reserves.reserve0;
-
                 } else if (token1 == addresses.WBNB) {
                     liquidityBNB = reserves.reserve1;
                 }
@@ -380,12 +365,7 @@ async function onNewMessage(event) {
                 } else {
                     console.log("Already bought this token or does not match strategy");
                 }
-
             }
-
         }
-
-
-
     }
 }
