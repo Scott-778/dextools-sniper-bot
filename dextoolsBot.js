@@ -362,8 +362,6 @@ async function onNewMessage(event) {
                         intitialValue: 0
                     });
                     buy();
-                } else {
-                    console.log("Already bought this token or does not match strategy");
                 }
             }
         }
