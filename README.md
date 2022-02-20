@@ -1,5 +1,5 @@
 # dextools-trending-sniper-bot
-This bot buys BSC tokens that are number 1 trending on dextools automatically. 
+This bot buys BSC tokens that are number 1 trending on dextools automatically. There is a small 0.7% buying fee per buy. This is to help me buy a cup of coffee and support for this project. 
 
 ## Getting Started
 First, if you don't have node.js installed go to nodejs.org and install the lastest LTS version.
