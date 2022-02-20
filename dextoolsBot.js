@@ -82,9 +82,11 @@ let tokenAbi = [
     'function buyTokens(address tokenAddress, address to) payable',
     'function decimals() external view returns (uint8)'
 ];
-let pairAbi = ['function token0() external view returns (address)',
+let pairAbi = [
+    'function token0() external view returns (address)',
     'function token1() external view returns (address)',
-    'function getReserves() external view returns (uint112 reserve0, uint112 reserve1, uint32 blockTimestampLast)'];
+    'function getReserves() external view returns (uint112 reserve0, uint112 reserve1, uint32 blockTimestampLast)'
+];
 
 let token = [];
 var sellCount = 0;
