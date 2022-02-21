@@ -1,6 +1,8 @@
-# dextools-trending-sniper-bot
-This bot buys BSC tokens that are number 1 trending on dextools automatically. Use at your own risk. Investing in cryptocurrency is risky. This is not financial advice. There is a small 0.7% buying fee per buy. This is to help me buy a cup of coffee and support for this project. 
+<h1 align="center">Dextools Sniper Bot</h1>
+<p align="center">Sniper bot to buy number 1 trending tokens on Dextools.</p>
+
 ## Getting Started
+This bot buys BSC tokens that are number 1 trending on dextools automatically. Use at your own risk. Investing in cryptocurrency is risky. This is not financial advice. There is a small 0.7% buying fee per buy. This is to help me buy a cup of coffee and support for this project. 
 First, if you don't have node.js installed go to nodejs.org and install the lastest LTS version.
 Then go to my.telegram.org and create an app to get apiID and apiHash.
 Then subscribe to this channel on Telegram https://t.me/dextoolstrendingalerts
