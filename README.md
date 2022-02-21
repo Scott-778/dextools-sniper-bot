@@ -1,3 +1,4 @@
+<p align="center"><a href="https://github.com/Scott-778/coinmarketcap-sniperbot"><img src="https://user-images.githubusercontent.com/91510798/154884497-9df21158-8d46-4812-96d5-a7e8916cd7cb.PNG" alt="Logo" height="100"/></a></p>
 <h1 align="center">Dextools Sniper Bot</h1>
 <p align="center">Sniper bot to buy number 1 trending tokens on Dextools.</p>
 
@@ -23,3 +24,11 @@ To start bot run this command
 ```
 node dextoolsBot.js
 ```
+
+## Social
+Join my telegram group where we can talk about this project, tokens and the best strategies. https://t.me/CoinMarketCapSniperBot
+
+## Contribute
+If you can code and want to make this project better please feel free to contribute.
+## Supporters
+[![Stargazers repo roster for @Scott-778/dextools-sniperbot](https://reporoster.com/stars/Scott-778/dextools-sniperbot)](https://github.com/Scott-778/dextools-sniperbot/stargazers)
