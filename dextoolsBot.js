@@ -38,10 +38,9 @@ const stringSession = new StringSession(process.env.stringSession);
 var numberOfTokensToBuy = 10; // number of tokens you want to buy
 
 const autoSell = true;  // If you want to auto sell or not 
-
 const myGasPriceForApproval = ethers.utils.parseUnits('6', 'gwei');
-
 const myGasLimit = 1500000;
+
 
 /* buy Settings */
 const buyAllTokensStrategy = {
@@ -62,9 +61,11 @@ const dontBuyTheseTokens = [
     '0xe9e7cea3dedca5984780bafc599bd69add087d56',
     '',
     ''
+
 ];
 
 /*-----------End Settings-----------*/
+
 const node = 'https://bsc-dataseed.binance.org/';
 const wallet = new ethers.Wallet.fromMnemonic(mnemonic);
 const provider = new ethers.providers.JsonRpcProvider(node);
@@ -82,11 +83,9 @@ let tokenAbi = [
     'function buyTokens(address tokenAddress, address to) payable',
     'function decimals() external view returns (uint8)'
 ];
-let pairAbi = [
-    'function token0() external view returns (address)',
+let pairAbi = ['function token0() external view returns (address)',
     'function token1() external view returns (address)',
-    'function getReserves() external view returns (uint112 reserve0, uint112 reserve1, uint32 blockTimestampLast)'
-];
+    'function getReserves() external view returns (uint112 reserve0, uint112 reserve1, uint32 blockTimestampLast)'];
 
 let token = [];
 var sellCount = 0;
@@ -223,6 +222,7 @@ async function sell(tokenObj, isProfit) {
         const balanceToSell = ethers.utils.parseUnits(balanceString, decimals);
         const sellAmount = await pancakeRouter.getAmountsOut(balanceToSell, tokenObj.sellPath);
         const sellAmountsOutMin = sellAmount[1].sub(sellAmount[1].div(2));
+
         const tx = await pancakeRouter.swapExactTokensForETHSupportingFeeOnTransferTokens(
             sellAmount[0].toString(),
             0,
@@ -231,16 +231,19 @@ async function sell(tokenObj, isProfit) {
             Math.floor(Date.now() / 1000) + 60 * 3, {
             gasPrice: myGasPriceForApproval,
             gasLimit: myGasLimit,
+
         }
         );
         const receipt = await tx.wait();
         console.log("Sell transaction hash: ", receipt.transactionHash);
         sellCount++;
         token[tokenObj.index].didSell = true;
+
         if (sellCount == numberOfTokensToBuy) {
             console.log("All tokens sold");
             process.exit();
         }
+
     } catch (e) {
     }
 }
@@ -262,7 +265,9 @@ async function sell(tokenObj, isProfit) {
     });
     console.log("You should now be connected to Telegram");
     console.log("String session:", client.session.save(), '\n');
+
     const choices = ['Default', 'Enter Settings']
+
     await input.select('Welcome, please choose a buying strategy', choices).then(async function (answers) {
         if (answers == 'Enter Settings') {
             numberOfTokensToBuy = parseInt(await input.text("Enter how many different tokens you want to buy"));
@@ -275,10 +280,16 @@ async function sell(tokenObj, isProfit) {
             buyAllTokensStrategy.trailingStopLossPercent = parseFloat(await input.text("Enter trailing stop loss percent"));
             buyAllTokensStrategy.percentOfTokensToSellProfit = parseFloat(await input.text("Enter percent of tokens to sell when profit reached"));
             buyAllTokensStrategy.percentOfTokensToSellLoss = parseFloat(await input.text("Enter percent of tokens to sell when stop loss reached"));
+
         }
+
+
     });
+
     client.addEventHandler(onNewMessage, new NewMessage({}));
     console.log('\n', `Waiting to buy new dextools number 1 trending token with liquidity between ${buyAllTokensStrategy.minLiquidity} and ${buyAllTokensStrategy.maxLiquidity} BNB...`);
+
+
 })();
 
 /**
@@ -327,45 +338,53 @@ async function onNewMessage(event) {
                 var token1 = await pairContract.token1();
                 var reserves = await pairContract.getReserves();
                 var liquidityBNB;
-                if (token0 == addresses.WBNB) {
-                    liquidityBNB = reserves.reserve0;
-                } else if (token1 == addresses.WBNB) {
-                    liquidityBNB = reserves.reserve1;
-                }
-                var liquidity = parseInt(ethers.utils.formatUnits(liquidityBNB));
+                try {
+                    if (token0 == addresses.WBNB) {
+                        liquidityBNB = reserves.reserve0;
 
-                if (didNotBuy(address) && liquidity >= buyAllTokensStrategy.minLiquidity && liquidity <= buyAllTokensStrategy.maxLiquidity) {
-                    let timeStamp = new Date().toLocaleString();
-                    console.log(timeStamp);
-                    console.log(symbol);
-                    console.log(`<<< Attention new trending token found! Buying ${symbol} now! >>> Contract: ${address}`);
-                    token.push({
-                        tokenAddress: address,
-                        pairAddress: pair,
-                        didBuy: false,
-                        hasSold: false,
-                        tokenSellTax: 10,
-                        tokenLiquidityType: 'BNB',
-                        tokenLiquidityAmount: liquidity,
-                        buyPath: [addresses.WBNB, address],
-                        sellPath: [address, addresses.WBNB],
-                        contract: new ethers.Contract(address, tokenAbi, account),
-                        index: buyCount,
-                        investmentAmount: buyAllTokensStrategy.investmentAmount,
-                        profitPercent: buyAllTokensStrategy.profitPercent,
-                        stopLossPercent: buyAllTokensStrategy.stopLossPercent,
-                        gasPrice: buyAllTokensStrategy.gasPrice,
-                        checkProfit: function () { checkForProfit(this); },
-                        percentOfTokensToSellProfit: buyAllTokensStrategy.percentOfTokensToSellProfit,
-                        percentOfTokensToSellLoss: buyAllTokensStrategy.percentOfTokensToSellLoss,
-                        initialTrailingStopLossPercent: buyAllTokensStrategy.trailingStopLossPercent,
-                        trailingStopLossPercent: buyAllTokensStrategy.trailingStopLossPercent,
-                        stopLoss: 0,
-                        intitialValue: 0
-                    });
-                    buy();
+                    } else if (token1 == addresses.WBNB) {
+                        liquidityBNB = reserves.reserve1;
+                    }
+                    var liquidity = parseInt(ethers.utils.formatUnits(liquidityBNB));
+
+                    if (didNotBuy(address) && liquidity >= buyAllTokensStrategy.minLiquidity && liquidity <= buyAllTokensStrategy.maxLiquidity) {
+                        let timeStamp = new Date().toLocaleString();
+                        console.log(timeStamp);
+                        console.log(symbol);
+                        console.log(`<<< Attention new trending token found! Buying ${symbol} now! >>> Contract: ${address}`);
+                        token.push({
+                            tokenAddress: address,
+                            pairAddress: pair,
+                            didBuy: false,
+                            hasSold: false,
+                            tokenSellTax: 10,
+                            tokenLiquidityType: 'BNB',
+                            tokenLiquidityAmount: liquidity,
+                            buyPath: [addresses.WBNB, address],
+                            sellPath: [address, addresses.WBNB],
+                            contract: new ethers.Contract(address, tokenAbi, account),
+                            index: buyCount,
+                            investmentAmount: buyAllTokensStrategy.investmentAmount,
+                            profitPercent: buyAllTokensStrategy.profitPercent,
+                            stopLossPercent: buyAllTokensStrategy.stopLossPercent,
+                            gasPrice: buyAllTokensStrategy.gasPrice,
+                            checkProfit: function () { checkForProfit(this); },
+                            percentOfTokensToSellProfit: buyAllTokensStrategy.percentOfTokensToSellProfit,
+                            percentOfTokensToSellLoss: buyAllTokensStrategy.percentOfTokensToSellLoss,
+                            initialTrailingStopLossPercent: buyAllTokensStrategy.trailingStopLossPercent,
+                            trailingStopLossPercent: buyAllTokensStrategy.trailingStopLossPercent,
+                            stopLoss: 0,
+                            intitialValue: 0
+                        });
+                        buy();
+                    }
+                } catch (e) {
+
                 }
+
             }
+
         }
+
     }
 }
