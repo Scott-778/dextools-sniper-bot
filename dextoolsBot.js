@@ -330,15 +330,16 @@ async function onNewMessage(event) {
         var symbol = '';
         for (var i = 0; i < msg.length; i++) {
             if (msg[i] == 'BSC') {
-                symbol = msg[5];
-                address = message.entities[2].url.replace("https://www.bscscan.com/token/", "");
-                pair = message.entities[1].url.replace("https://www.dextools.io/app/bsc/pair-explorer/", "");
-                var pairContract = new ethers.Contract(pair, pairAbi, account);
-                var token0 = await pairContract.token0();
-                var token1 = await pairContract.token1();
-                var reserves = await pairContract.getReserves();
-                var liquidityBNB;
-                try {
+                try{
+                    symbol = msg[5];
+                    address = message.entities[2].url.replace("https://www.bscscan.com/token/", "");
+                    pair = message.entities[1].url.replace("https://www.dextools.io/app/bsc/pair-explorer/", "");
+                    var pairContract = new ethers.Contract(pair, pairAbi, account);
+                    var token0 = await pairContract.token0();
+                    var token1 = await pairContract.token1();
+                    var reserves = await pairContract.getReserves();
+                    var liquidityBNB;
+                
                     if (token0 == addresses.WBNB) {
                         liquidityBNB = reserves.reserve0;
 
