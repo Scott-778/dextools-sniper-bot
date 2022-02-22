@@ -327,13 +327,6 @@ async function sell(tokenObj, isProfit) {
  * 
  * */
 function didNotBuy(address) {
-    for (var i = 0; i < token.length; i++) {
-        if (address == token[i].tokenAddress) {
-            return false;
-        } else {
-            return true;
-        }
-    }
     for (var j = 0; j < dontBuyTheseTokens.length; j++) {
         if (address == dontBuyTheseTokens[j].address) {
             return false;
