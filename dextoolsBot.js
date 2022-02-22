@@ -43,6 +43,9 @@ const myGasLimit = 1500000;
 
 
 /* buy Settings */
+
+var trendingToken = 1;   // only 1 or 15 for right now. 1 is #1 trending token, 15 is #15 trending token.
+
 const buyAllTokensStrategy = {
 
     investmentAmount: '0.1', // Amount to invest per token in BNB
@@ -52,7 +55,7 @@ const buyAllTokensStrategy = {
     percentOfTokensToSellProfit: 75, // sell 75% when profit is reached
     percentOfTokensToSellLoss: 100, // sell 100% when stoploss is reached 
     trailingStopLossPercent: 15, // 15% trailing stoploss
-    maxLiquidity: 1000,	        // max Liquidity BNB
+    maxLiquidity: 400,	        // max Liquidity BNB
     minLiquidity: 100 	  	// min Liquidity BNB
 }
 
@@ -61,7 +64,6 @@ const dontBuyTheseTokens = [
     '0xe9e7cea3dedca5984780bafc599bd69add087d56',
     '',
     ''
-
 ];
 
 /*-----------End Settings-----------*/
@@ -266,8 +268,13 @@ async function sell(tokenObj, isProfit) {
     console.log("You should now be connected to Telegram");
     console.log("String session:", client.session.save(), '\n');
 
-    const choices = ['Default', 'Enter Settings']
-
+    const choices = ['Default', 'Enter Settings'];
+    const choices2 = ['Trending #1', 'Trending #15'];
+    /**
+     * 
+     * Dont change code below
+     * 
+     * */
     await input.select('Welcome, please choose a buying strategy', choices).then(async function (answers) {
         if (answers == 'Enter Settings') {
             numberOfTokensToBuy = parseInt(await input.text("Enter how many different tokens you want to buy"));
@@ -280,14 +287,21 @@ async function sell(tokenObj, isProfit) {
             buyAllTokensStrategy.trailingStopLossPercent = parseFloat(await input.text("Enter trailing stop loss percent"));
             buyAllTokensStrategy.percentOfTokensToSellProfit = parseFloat(await input.text("Enter percent of tokens to sell when profit reached"));
             buyAllTokensStrategy.percentOfTokensToSellLoss = parseFloat(await input.text("Enter percent of tokens to sell when stop loss reached"));
-
+            await input.select('Choose  #1 trending token or #15 trending token', choices2).then(async function (answers2) {
+                if (answers2 == "Trending #1") {
+                    trendingToken = 1;
+                }
+                else {
+                    trendingToken = 15;
+                }
+            });
         }
 
 
     });
 
     client.addEventHandler(onNewMessage, new NewMessage({}));
-    console.log('\n', `Waiting to buy new dextools number 1 trending token with liquidity between ${buyAllTokensStrategy.minLiquidity} and ${buyAllTokensStrategy.maxLiquidity} BNB...`);
+    console.log('\n', `Waiting to buy new dextools #${trendingToken} trending token with liquidity between ${buyAllTokensStrategy.minLiquidity} and ${buyAllTokensStrategy.maxLiquidity} BNB...`);
 
 
 })();
@@ -330,16 +344,23 @@ async function onNewMessage(event) {
         var symbol = '';
         for (var i = 0; i < msg.length; i++) {
             if (msg[i] == 'BSC') {
-                try{
-                    symbol = msg[5];
-                    address = message.entities[2].url.replace("https://www.bscscan.com/token/", "");
-                    pair = message.entities[1].url.replace("https://www.dextools.io/app/bsc/pair-explorer/", "");
+                try {
+
+                    if (trendingToken == 1) {
+                        symbol = msg[5];
+                        address = message.entities[2].url.replace("https://www.bscscan.com/token/", "");
+                        pair = message.entities[1].url.replace("https://www.dextools.io/app/bsc/pair-explorer/", "");
+                    } else if (trendingToken == 15) {
+                        symbol = msg[89];
+                        address = message.entities[44].url.replace("https://www.bscscan.com/token/", "");
+                        pair = message.entities[43].url.replace("https://www.dextools.io/app/bsc/pair-explorer/", "");
+                    }
                     var pairContract = new ethers.Contract(pair, pairAbi, account);
                     var token0 = await pairContract.token0();
                     var token1 = await pairContract.token1();
                     var reserves = await pairContract.getReserves();
                     var liquidityBNB;
-                
+
                     if (token0 == addresses.WBNB) {
                         liquidityBNB = reserves.reserve0;
 
@@ -380,6 +401,7 @@ async function onNewMessage(event) {
                         buy();
                     }
                 } catch (e) {
+
 
                 }
 
