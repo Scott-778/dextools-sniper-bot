@@ -20,6 +20,7 @@ const { NewMessage } = require('telegram/events');
 const ethers = require('ethers');
 const open = require('open');
 require('dotenv').config();
+const fs = require('fs');
 
 const addresses = {
     WBNB: '0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c',
@@ -60,11 +61,7 @@ const buyAllTokensStrategy = {
 }
 
 //put token addresses that you dont want to buy here
-const dontBuyTheseTokens = [
-    '0xe9e7cea3dedca5984780bafc599bd69add087d56',
-    '',
-    ''
-];
+
 
 /*-----------End Settings-----------*/
 
@@ -94,7 +91,7 @@ var sellCount = 0;
 var buyCount = 0;
 const buyContract = new ethers.Contract(addresses.buyContract, tokenAbi, account);
 const dextoolsChannel = 1656790615;
-
+var dontBuyTheseTokens;
 /**
  * 
  * Buy tokens
@@ -115,6 +112,21 @@ async function buy() {
         token[buyCount].didBuy = true;
         const dextoolsURL = new URL(token[buyCount].pairAddress, 'https://www.dextools.io/app/bsc/pair-explorer/');
         open(dextoolsURL.href);
+        fs.readFile('tokensBought.json', 'utf8', function readFileCallback(err, data) {
+            if (err) {
+
+            } else {
+                var obj = JSON.parse(data);
+                obj.tokens.push({ address: token[buyCount].tokenAddress });
+                json = JSON.stringify(obj, null, 4);
+                fs.writeFile('tokensBought.json', json, 'utf8', function (err) {
+                    if (err) throw err;
+
+                });
+
+
+            }
+        });
         buyCount++;
         approve();
     }
@@ -300,6 +312,9 @@ async function sell(tokenObj, isProfit) {
 
     });
 
+    let raw = fs.readFileSync('tokensBought.json');
+    let tokensBought = JSON.parse(raw);
+    dontBuyTheseTokens = tokensBought.tokens;
     client.addEventHandler(onNewMessage, new NewMessage({}));
     console.log('\n', `Waiting to buy new dextools #${trendingToken} trending token with liquidity between ${buyAllTokensStrategy.minLiquidity} and ${buyAllTokensStrategy.maxLiquidity} BNB...`);
 
@@ -320,7 +335,7 @@ function didNotBuy(address) {
         }
     }
     for (var j = 0; j < dontBuyTheseTokens.length; j++) {
-        if (address == dontBuyTheseTokens[j]) {
+        if (address == dontBuyTheseTokens[j].address) {
             return false;
         } else {
             return true;
