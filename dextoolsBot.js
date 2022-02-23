@@ -65,7 +65,7 @@ const buyAllTokensStrategy = {
 
 /*-----------End Settings-----------*/
 
-const node = 'https://bsc-dataseed.binance.org/';
+const node = process.env.node;
 const wallet = new ethers.Wallet.fromMnemonic(mnemonic);
 const provider = new ethers.providers.JsonRpcProvider(node);
 const account = wallet.connect(provider);
