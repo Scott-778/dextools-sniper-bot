@@ -112,12 +112,13 @@ async function buy() {
         token[buyCount].didBuy = true;
         const dextoolsURL = new URL(token[buyCount].pairAddress, 'https://www.dextools.io/app/bsc/pair-explorer/');
         open(dextoolsURL.href);
+        buyCount++;
         fs.readFile('tokensBought.json', 'utf8', function readFileCallback(err, data) {
             if (err) {
 
             } else {
                 var obj = JSON.parse(data);
-                obj.tokens.push({ address: token[buyCount].tokenAddress });
+                obj.tokens.push({ address: token[buyCount-1].tokenAddress });
                 json = JSON.stringify(obj, null, 4);
                 fs.writeFile('tokensBought.json', json, 'utf8', function (err) {
                     if (err) throw err;
@@ -127,7 +128,7 @@ async function buy() {
 
             }
         });
-        buyCount++;
+       
         approve();
     }
 
