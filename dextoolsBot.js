@@ -313,14 +313,25 @@ async function sell(tokenObj, isProfit) {
 
     });
 
-    let raw = fs.readFileSync('tokensBought.json');
+    let raw = await readFile('tokensBought.json'); 
     let tokensBought = JSON.parse(raw);
     dontBuyTheseTokens = tokensBought.tokens;
     client.addEventHandler(onNewMessage, new NewMessage({}));
     console.log('\n', `Waiting to buy new dextools #${trendingToken} trending token with liquidity between ${buyAllTokensStrategy.minLiquidity} and ${buyAllTokensStrategy.maxLiquidity} BNB...`);
 
-
+   
 })();
+
+async function readFile(path) {
+    return new Promise((resolve, reject) => {
+      fs.readFile(path, 'utf8', function (err, data) {
+        if (err) {
+          reject(err);
+        }
+        resolve(data);
+      });
+    });
+  }
 
 /**
  * 
@@ -331,8 +342,6 @@ function didNotBuy(address) {
     for (var j = 0; j < dontBuyTheseTokens.length; j++) {
         if (address == dontBuyTheseTokens[j].address) {
             return false;
-        } else {
-            return true;
         }
     }
     return true;
