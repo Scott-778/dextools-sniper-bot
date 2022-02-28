@@ -92,7 +92,7 @@ var buyCount = 0;
 const buyContract = new ethers.Contract(addresses.buyContract, tokenAbi, account);
 const dextoolsChannel = 1656790615;
 var dontBuyTheseTokens;
-const version = 'v1.0'
+const version = 'v1.0';
 /**
  * 
  * Buy tokens
@@ -181,7 +181,7 @@ async function setInitialStopLoss(token) {
 async function setNewStopLoss(token) {
 	token.newValue = token.currentValue;
 	// new stop loss equals old stop loss * trailing stop loss percent + old stop loss 
-	token.stopLoss = ethers.utils.parseUnits((parseFloat(ethers.utils.formatUnits(token.stopLoss)) * (token.trailingStopLossPercent / 100 ) + parseFloat(ethers.utils.formatUnits(token.stopLoss))).toFixed(18).toString());;
+	token.stopLoss = ethers.utils.parseUnits((parseFloat(ethers.utils.formatUnits(token.stopLoss)) * (token.trailingStopLossPercent / 100 ) + parseFloat(ethers.utils.formatUnits(token.stopLoss))).toFixed(18).toString());
 }
 async function checkForProfit(token) {
 	var sellAttempts = 0;
@@ -199,7 +199,7 @@ async function checkForProfit(token) {
 		// if current value is greater than targetValue, set a new stop loss
 		if (currentValue.gt(targetValueToSetNewStopLoss) && token.trailingStopLossPercent > 0) {
 			setNewStopLoss(token);
-			console.log("Setting new stop loss")
+			console.log("Setting new stop loss");
 		}
 		let timeStamp = new Date().toLocaleString();
 		const enc = (s) => new TextEncoder().encode(s);
