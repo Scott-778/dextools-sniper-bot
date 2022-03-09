@@ -9,10 +9,10 @@ Then go to my.telegram.org and create an app to get apiID and apiHash.
 Then subscribe to this channel on Telegram https://t.me/dextoolstrendingalerts
 Then Use the following commands either in VScode or command prompt 
 ```
-git clone https://github.com/Scott-778/dextools-sniperbot.git
+git clone https://github.com/Scott-778/dextools-sniper-bot.git
 ```
 ```
-cd dextools-sniperbot
+cd dextools-sniper-bot
 ```
 ```
 npm install
