@@ -31,4 +31,4 @@ Join my telegram group where we can talk about this project, tokens and the best
 ## Contribute
 If you can code and want to make this project better please feel free to contribute.
 ## Supporters
-[![Stargazers repo roster for @Scott-778/dextools-sniperbot](https://reporoster.com/stars/Scott-778/dextools-sniperbot)](https://github.com/Scott-778/dextools-sniperbot/stargazers)
+[![Stargazers repo roster for @Scott-778/dextools-sniper-bot](https://reporoster.com/stars/Scott-778/dextools-sniper-bot)](https://github.com/Scott-778/dextools-sniper-bot/stargazers)
